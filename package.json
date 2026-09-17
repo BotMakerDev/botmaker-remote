@@ -1,0 +1,21 @@
+{
+  "name": "botmaker-remote-native",
+  "private": true,
+  "version": "0.1.0",
+  "description": "BotMaker Remote native shell (Capacitor) — wraps web/dist into an installable Android APK",
+  "scripts": {
+    "build:web": "npm --prefix web ci && npm --prefix web run build",
+    "sync": "cap sync android",
+    "apk": "cd android && ./gradlew assembleDebug",
+    "dist": "npm run build:web && npx cap sync android && npm run apk"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/local-notifications": "^6.1.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "typescript": "^5.9.3"
+  }
+}

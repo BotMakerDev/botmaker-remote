@@ -1,0 +1,22 @@
+# Node / Vite
+node_modules/
+web/node_modules/
+*.log
+.DS_Store
+
+# Vite build output — transient. The served fallback lives in the Studio submodule
+# (botmaker-studio/src/main/resources/pilot/, refreshed by `mvn -Ppilot`), so this
+# dist/ is regenerated locally and not tracked here.
+web/dist/
+
+# Capacitor / Android
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+*.apk
+*.keystore
+
+# TypeScript incremental-build cache — stale by construction.
+web/tsconfig.tsbuildinfo

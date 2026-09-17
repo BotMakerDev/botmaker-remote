@@ -1,0 +1,298 @@
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --line: #2a2f3a;
+  --text: #e6e8ee;
+  --muted: #8b93a7;
+  --accent: #5b8def;
+  --waiting: #f2b33d;
+  --running: #4cc38a;
+  --idle: #5c6270;
+  --danger: #e5484d;
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+code {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.92em;
+  color: #c9d1e3;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+button.ghost {
+  background: transparent;
+  border-color: transparent;
+  padding: 8px 12px;
+  font-size: 20px;
+  line-height: 1;
+}
+button.ghost.danger {
+  color: var(--danger);
+}
+button.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--muted);
+  text-decoration: underline;
+}
+input {
+  font: inherit;
+  color: inherit;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 0;
+  flex: 1;
+}
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: 13px;
+}
+.error {
+  color: var(--danger);
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  gap: 12px;
+}
+.screen header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.screen header h1,
+.screen header .name {
+  flex: 1;
+  margin: 0;
+  font-size: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+/* --- connect --- */
+.connect {
+  justify-content: center;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.connect h1 {
+  margin: 0;
+}
+
+/* --- sessions --- */
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--idle);
+}
+.dot.on {
+  background: var(--running);
+}
+.dot.off {
+  background: var(--danger);
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+.list li {
+  display: flex;
+  gap: 4px;
+  align-items: stretch;
+}
+.session-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  text-align: left;
+  padding: 12px 14px;
+  background: var(--panel);
+}
+.session-main .badge {
+  grid-row: 1 / span 2;
+  align-self: center;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--idle);
+}
+.session.running .badge {
+  background: var(--running);
+}
+.session.waiting .badge {
+  background: var(--waiting);
+  box-shadow: 0 0 0 4px rgba(242, 179, 61, 0.25);
+}
+.session-main .name {
+  font-weight: 600;
+}
+.session-main .state,
+.session-main .msg {
+  color: var(--muted);
+  font-size: 13px;
+  grid-column: 2;
+}
+.session.waiting .state {
+  color: var(--waiting);
+}
+.picker {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.picker h2 {
+  margin: 0;
+  font-size: 16px;
+}
+.fab {
+  margin-top: auto;
+  padding: 14px;
+  font-size: 16px;
+}
+footer {
+  text-align: center;
+}
+.update {
+  display: block;
+  background: var(--accent);
+  color: #fff;
+  text-align: center;
+  padding: 8px;
+  text-decoration: none;
+}
+
+/* --- terminal --- */
+.terminal {
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
+  gap: 6px;
+}
+.term-box {
+  flex: 1;
+  min-height: 120px;
+  background: #0f1115;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.terminal .bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  flex: none;
+}
+.terminal .bar button {
+  flex: none;
+  padding: 8px 12px;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 13px;
+}
+.terminal .bar .key {
+  border-color: var(--accent);
+}
+.status-open {
+  color: var(--running);
+}
+.status-closed {
+  color: var(--danger);
+}
+
+/* --- QR scanner (fullscreen camera), the pilot's --- */
+.scanner {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.scanner-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.scanner-frame {
+  position: relative;
+  width: min(70vw, 260px);
+  aspect-ratio: 1;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.45);
+}
+.scanner-hint {
+  position: absolute;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  left: 20px;
+  right: 20px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 3px #000;
+}
+.scanner-cancel {
+  position: absolute;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  padding: 12px 28px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  background: rgba(20, 20, 20, 0.85);
+  color: #fff;
+  cursor: pointer;
+}

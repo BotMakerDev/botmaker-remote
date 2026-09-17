@@ -1,0 +1,41 @@
+# JReleaser — what ONE release of this repository looks like: the GitHub Release and the APK on it. The
+# umbrella's release library pushes the tag and decides the order; this file never tags.
+#
+# No CHANGELOG.md here, like botmaker-pilot: the notes are JReleaser's own commit log since the previous
+# tag, which is why ci.yml checks out with fetch-depth 0.
+
+project:
+  name: botmaker-remote
+  description: The Claude Code terminals on a dev box, from a phone — pairs with botmaker-remote-server.
+  authors:
+    - LiQiyeDev
+  license: CC0-1.0
+  copyright: LiQiyeDev
+  inceptionYear: '2026'
+  links:
+    homepage: https://github.com/LiQiyeDev/botmaker-remote
+  languages:
+    java:
+      groupId: dev.liqiye
+      artifactId: botmaker-remote
+      version: '17'
+
+release:
+  github:
+    owner: LiQiyeDev
+    name: botmaker-remote
+    tagName: 'v{{projectVersion}}'
+    releaseName: 'v{{projectVersion}}'
+    skipTag: true
+    overwrite: false
+    update:
+      enabled: false
+    changelog:
+      formatted: ALWAYS
+      preset: conventional-commits
+
+files:
+  artifacts:
+    # Unversioned: the app's own updater and the README point at
+    # releases/latest/download/botmaker-remote.apk.
+    - path: botmaker-remote.apk

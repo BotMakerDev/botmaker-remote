@@ -57,7 +57,12 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      # `packages` is set because the action's default is `tools platform-tools`, and Google removed the
+      # legacy `tools` package from the SDK repository: v0.0.1's build failed on 2026-09-17 with
+      # "Failed to find package 'tools'" before a single line of ours ran. Gradle installs what it needs.
       - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
 
       - name: Build web + sync + assemble APK
         run: |

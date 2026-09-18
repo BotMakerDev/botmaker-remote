@@ -13,7 +13,7 @@ project:
   copyright: LiQiyeDev
   inceptionYear: '2026'
   links:
-    homepage: https://github.com/LiQiyeDev/botmaker-remote
+    homepage: https://github.com/BotMakerDev/botmaker-remote
   languages:
     java:
       groupId: dev.liqiye
@@ -22,7 +22,7 @@ project:
 
 release:
   github:
-    owner: LiQiyeDev
+    owner: BotMakerDev
     name: botmaker-remote
     tagName: 'v{{projectVersion}}'
     releaseName: 'v{{projectVersion}}'

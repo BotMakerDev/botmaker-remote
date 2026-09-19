@@ -1,6 +1,15 @@
+<!--
+  BotMaker Remote's icon: a terminal prompt, which is what this app is — the tmux session `claude` as PTYs
+  on a phone.
+
+  It was byte-identical to botmaker-pilot's until 2026-09-19 (both were Capacitor's placeholder replaced by
+  one generic mark), so the two apps were indistinguishable on a home screen. Same tile, same palette, a
+  different mark: the pilot targets, this one types.
+-->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="96" fill="#0f1115"/>
-  <circle cx="256" cy="256" r="150" fill="none" stroke="#2f6fed" stroke-width="28"/>
-  <circle cx="256" cy="256" r="46" fill="#2ecc71"/>
-  <path d="M256 60 v56 M256 396 v56 M60 256 h56 M396 256 h56" stroke="#8b93a1" stroke-width="24" stroke-linecap="round"/>
+  <rect x="76" y="108" width="360" height="296" rx="32" fill="none" stroke="#2f6fed" stroke-width="24"/>
+  <path d="M150 208 L206 256 L150 304" fill="none" stroke="#2ecc71" stroke-width="28"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M244 308 h118" stroke="#8b93a1" stroke-width="28" stroke-linecap="round"/>
 </svg>

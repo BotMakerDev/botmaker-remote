@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 declare const __APP_VERSION__: string;
 export const APP_VERSION = __APP_VERSION__;
 
-const RELEASES_API = "https://api.github.com/repos/LiQiyeDev/botmaker-remote/releases/latest";
+const RELEASES_API = "https://api.github.com/repos/BotMakerDev/botmaker-remote/releases/latest";
 /** Stable permalink to the latest APK. */
 export const LATEST_APK_URL =
-  "https://github.com/LiQiyeDev/botmaker-remote/releases/latest/download/botmaker-remote.apk";
+  "https://github.com/BotMakerDev/botmaker-remote/releases/latest/download/botmaker-remote.apk";
 
 const CHECK_KEY = "botmaker-remote.updateCheckedAt";
 const CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000; // auto-check throttle: at most once every 6h

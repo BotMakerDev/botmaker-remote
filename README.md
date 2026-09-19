@@ -1,7 +1,7 @@
 # botmaker-remote
 
 The Claude Code terminals on a dev box, from a phone. Pairs with
-[botmaker-remote-server](https://github.com/LiQiyeDev/botmaker-remote-server) over Tailscale.
+[botmaker-remote-server](https://github.com/BotMakerDev/botmaker-remote-server) over Tailscale.
 
 **Why.** Claude Code's Remote Control binds one Claude account, and switching accounts with `cswap` ends
 the session. This app attaches to *terminals* instead — one tmux window per account — so nothing switches
@@ -22,7 +22,7 @@ A *waiting* window raises a notification while the app is open. For a phone in a
 
 ## Install
 
-Android: [`botmaker-remote.apk`](https://github.com/LiQiyeDev/botmaker-remote/releases/latest/download/botmaker-remote.apk)
+Android: [`botmaker-remote.apk`](https://github.com/BotMakerDev/botmaker-remote/releases/latest/download/botmaker-remote.apk)
 (the app checks for a newer release itself). The phone must be on the same tailnet as the dev box.
 
 Any browser works too: `web/` is a plain Vite app — `npm --prefix web run dev`, open it on the phone, pair.

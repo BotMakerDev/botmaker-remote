@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Account, ActivityEvent, Api, Session } from "./api";
 import { notifyWaiting } from "./notify";
+import { isUnreachable } from "./reach";
 
 /**
  * The session list, kept current two ways: re-fetched on demand (and every 15 s, since a window opened
@@ -12,6 +13,7 @@ export function useSessions(api: Api | null, watching: number | null) {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [online, setOnline] = useState(false);
+  const [unreachable, setUnreachable] = useState(false);
   const watchingRef = useRef(watching);
   watchingRef.current = watching;
 
@@ -23,8 +25,10 @@ export function useSessions(api: Api | null, watching: number | null) {
       setAccounts(slots);
       setError(null);
       setOnline(true);
+      setUnreachable(false);
     } catch (e) {
       setOnline(false);
+      setUnreachable(isUnreachable(e));
       setError((e as Error).message === "unauthorized" ? "unauthorized" : `Server unreachable: ${(e as Error).message}`);
     }
   }, [api]);
@@ -74,5 +78,5 @@ export function useSessions(api: Api | null, watching: number | null) {
     };
   }, [api]);
 
-  return { sessions, accounts, error, online, refresh };
+  return { sessions, accounts, error, online, unreachable, refresh };
 }

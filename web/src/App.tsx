@@ -14,7 +14,7 @@ export function App() {
   const [open, setOpen] = useState<Session | null>(null);
   const [connectError, setConnectError] = useState<string | null>(null);
   const api = useMemo(() => (endpoint ? new Api(endpoint) : null), [endpoint]);
-  const { sessions, accounts, error, online, refresh } = useSessions(api, open?.index ?? null);
+  const { sessions, accounts, error, online, unreachable, refresh } = useSessions(api, open?.index ?? null);
   const update = useAppUpdate();
 
   useEffect(() => {
@@ -60,6 +60,9 @@ export function App() {
         sessions={sessions}
         accounts={accounts}
         online={online}
+        unreachable={unreachable}
+        host={endpoint.host}
+        port={endpoint.port}
         error={error === "unauthorized" ? null : error}
         version={update.version}
         onOpen={setOpen}

@@ -17,6 +17,11 @@ and nothing disconnects.
   keyboard lacks (`Esc`, `Tab`, `↑`, `↓`, `^C`, `⏎`) and **quick replies** (`y`, `continue`, `/clear`, …;
   edit the list with ⋯).
 
+When the server does not answer, the Sessions screen says so and lists what to try for the address it was
+paired with: for a Tailscale address, connect Tailscale, turn on Android's *Always-on VPN* for it and set its
+battery use to *Unrestricted*; for a local address, join the same Wi-Fi. **Retry** checks again, and the
+server's `--doctor` shows the same from the computer, with when it last saw the phone.
+
 A *waiting* window raises a notification while the app is open. For a phone in a pocket, subscribe the
 [ntfy](https://ntfy.sh) app to a topic and give the same URL to the server's `--ntfy`.
 

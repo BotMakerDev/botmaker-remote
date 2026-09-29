@@ -1,10 +1,15 @@
 import { useState } from "react";
 import type { Account, Session } from "./api";
+import { Unreachable } from "./Unreachable";
 
 interface Props {
   sessions: Session[];
   accounts: Account[];
   online: boolean;
+  /** The last refresh never reached the server: show what to try instead of the list. */
+  unreachable: boolean;
+  host: string;
+  port: number;
   error: string | null;
   version: string;
   onOpen: (s: Session) => void;
@@ -44,7 +49,11 @@ export function SessionsScreen(p: Props) {
           ↻
         </button>
       </header>
-      {p.error && <p className="error">{p.error}</p>}
+      {p.unreachable ? (
+        <Unreachable host={p.host} port={p.port} detail={p.error} onRetry={p.onRefresh} />
+      ) : (
+        p.error && <p className="error">{p.error}</p>
+      )}
       {p.sessions.length === 0 && !p.error && (
         <p className="muted">No windows in tmux session <code>claude</code>. Open one below.</p>
       )}

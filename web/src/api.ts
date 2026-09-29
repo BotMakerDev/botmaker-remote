@@ -91,6 +91,8 @@ export class Api {
 
   private async fetch(path: string, init: RequestInit = {}): Promise<Response> {
     const res = await fetch(httpBase(this.ep) + path, {
+      // A host the phone has no route to can leave a request pending for minutes; ten seconds says "unreachable".
+      signal: AbortSignal.timeout(10_000),
       ...init,
       headers: {
         "X-Botmaker-Token": this.ep.token,

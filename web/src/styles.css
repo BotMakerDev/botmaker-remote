@@ -224,6 +224,41 @@ input {
   margin: 0;
   font-size: 16px;
 }
+.start-in {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.start-in code {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.chip {
+  padding: 6px 10px;
+  font-size: 13px;
+  font-family: ui-monospace, Menlo, monospace;
+}
+.dir-path {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.dir-list {
+  max-height: 45vh;
+  gap: 4px;
+}
+.dir-row {
+  flex: 1;
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--panel);
+}
 .fab {
   margin-top: auto;
   padding: 14px;

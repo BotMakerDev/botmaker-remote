@@ -4,6 +4,7 @@ import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import type { Api, Session } from "./api";
 import { loadQuickReplies, saveQuickReplies } from "./config";
+import { attachTouchScroll } from "./touchScroll";
 
 interface Props {
   api: Api;
@@ -86,6 +87,10 @@ export function TerminalScreen({ api, session, onBack }: Props) {
     const binarySub = t.onBinary((s) => {
       if (ws?.readyState === WebSocket.OPEN) ws.send(Uint8Array.from(s, (c) => c.charCodeAt(0)));
     });
+    // A finger drag scrolls tmux's history: see touchScroll.ts for why xterm.js cannot do it alone.
+    const stopTouch = attachTouchScroll(el, t, (s) => {
+      if (ws?.readyState === WebSocket.OPEN) ws.send(encoder.encode(s));
+    });
     const observer = new ResizeObserver(() => {
       fit.fit();
       sendSize();
@@ -107,6 +112,7 @@ export function TerminalScreen({ api, session, onBack }: Props) {
       if (retry) clearTimeout(retry);
       vv?.removeEventListener("resize", onViewport);
       observer.disconnect();
+      stopTouch();
       dataSub.dispose();
       binarySub.dispose();
       ws?.close();

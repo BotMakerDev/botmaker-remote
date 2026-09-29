@@ -19,6 +19,14 @@ export interface Account {
   active: boolean;
 }
 
+/** One directory, as `GET /api/dirs` describes it. `parent` is null at home: the browser goes no higher. */
+export interface DirListing {
+  path: string;
+  parent: string | null;
+  home: string;
+  dirs: string[];
+}
+
 export interface Status {
   version: string;
   tmux: boolean;
@@ -51,12 +59,23 @@ export class Api {
     return this.get("/api/accounts");
   }
 
-  async open(slot: string, name?: string): Promise<Session> {
+  /** Opens a window running Claude under `slot`, started in `cwd` (the server's home when empty). */
+  async open(slot: string, name: string, cwd: string): Promise<Session> {
     const res = await this.fetch("/api/sessions", {
       method: "POST",
-      body: JSON.stringify({ slot, name: name ?? "" }),
+      body: JSON.stringify({ slot, name, cwd }),
     });
     return (await res.json()) as Session;
+  }
+
+  /** A directory's sub-directories on the server; `path` empty is home. Nothing above home is listed. */
+  dirs(path: string): Promise<DirListing> {
+    return this.get(`/api/dirs?path=${encodeURIComponent(path)}`);
+  }
+
+  /** The directories sessions started in, newest first. */
+  recentDirs(): Promise<string[]> {
+    return this.get("/api/dirs/recent");
   }
 
   async close(index: number): Promise<void> {

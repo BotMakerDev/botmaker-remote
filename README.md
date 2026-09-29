@@ -12,8 +12,12 @@ and nothing disconnects.
 - **Connect** — scan the QR the server printed (or paste its `pair:` line). Remembered.
 - **Sessions** — every window in the tmux session `claude`, with a badge: *working*, *waiting for you*
   (Claude Code's own `Stop`/`Notification` hooks say so), *no Claude*. ＋ opens a new window under any
-  `cswap` account, with that account's 5h/7d usage beside it. ✕ closes one.
-- **Terminal** — xterm.js on the window, resizing with rotation and the keyboard. A bar of keys the soft
+  `cswap` account, with that account's 5h/7d usage beside it, started in a directory you pick: the last
+  one used by default, the recent ones as chips, or *Change…* to browse the server's home (nothing above
+  it). ✕ closes one.
+- **Terminal** — xterm.js on the window, resizing with rotation and the keyboard. Drag a finger to scroll
+  back through Claude Code's output (tmux's history; a server older than 0.2.0 does not turn tmux's mouse
+  on, and dragging does nothing there). A bar of keys the soft
   keyboard lacks (`Esc`, `Tab`, `↑`, `↓`, `^C`, `⏎`) and **quick replies** (`y`, `continue`, `/clear`, …;
   edit the list with ⋯).
 

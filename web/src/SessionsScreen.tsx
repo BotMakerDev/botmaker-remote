@@ -1,8 +1,10 @@
 import { useState } from "react";
-import type { Account, Session } from "./api";
+import type { Account, Api, Session } from "./api";
+import { DirPicker, tildePath } from "./DirPicker";
 import { Unreachable } from "./Unreachable";
 
 interface Props {
+  api: Api;
   sessions: Session[];
   accounts: Account[];
   online: boolean;
@@ -13,7 +15,7 @@ interface Props {
   error: string | null;
   version: string;
   onOpen: (s: Session) => void;
-  onNew: (slot: string, name: string) => Promise<void>;
+  onNew: (slot: string, name: string, cwd: string) => Promise<void>;
   onClose: (s: Session) => Promise<void>;
   onRefresh: () => void;
   onForget: () => void;
@@ -28,12 +30,22 @@ const STATE_LABEL: Record<Session["state"], string> = {
 /** The list of tmux windows, one row each, and the ＋ that opens a new one under a chosen account. */
 export function SessionsScreen(p: Props) {
   const [picking, setPicking] = useState(false);
+  const [browsing, setBrowsing] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
+  // Where the new session starts: the last directory used, else the server's home ("").
+  const [cwd, setCwd] = useState("");
+  const [home, setHome] = useState("");
+
+  const openPicker = () => {
+    setPicking(true);
+    p.api.recentDirs().then((r) => setCwd(r[0] ?? ""), () => setCwd(""));
+    p.api.dirs("").then((l) => setHome(l.home), () => setHome(""));
+  };
 
   const start = async (a: Account) => {
     setBusy(a.slot);
     try {
-      await p.onNew(a.slot, a.label);
+      await p.onNew(a.slot, a.label, cwd);
       setPicking(false);
     } finally {
       setBusy(null);
@@ -79,8 +91,25 @@ export function SessionsScreen(p: Props) {
         ))}
       </ul>
 
-      {picking ? (
+      {picking && browsing ? (
+        <DirPicker
+          api={p.api}
+          start={cwd}
+          onPick={(path) => {
+            setCwd(path);
+            setBrowsing(false);
+          }}
+          onCancel={() => setBrowsing(false)}
+        />
+      ) : picking ? (
         <div className="picker">
+          <div className="start-in">
+            <span className="muted small">Start in</span>
+            <code>{cwd ? tildePath(cwd, home) : "~"}</code>
+            <button className="ghost" onClick={() => setBrowsing(true)}>
+              Change…
+            </button>
+          </div>
           <h2>New session under…</h2>
           {p.accounts.length === 0 && <p className="muted">cswap lists no accounts on the server.</p>}
           <ul className="list">
@@ -103,7 +132,7 @@ export function SessionsScreen(p: Props) {
           </button>
         </div>
       ) : (
-        <button className="primary fab" onClick={() => setPicking(true)} disabled={!p.online}>
+        <button className="primary fab" onClick={openPicker} disabled={!p.online}>
           ＋ New session
         </button>
       )}

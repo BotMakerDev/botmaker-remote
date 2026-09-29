@@ -57,6 +57,7 @@ export function App() {
         </a>
       )}
       <SessionsScreen
+        api={api}
         sessions={sessions}
         accounts={accounts}
         online={online}
@@ -66,8 +67,8 @@ export function App() {
         error={error === "unauthorized" ? null : error}
         version={update.version}
         onOpen={setOpen}
-        onNew={async (slot, name) => {
-          const made = await api.open(slot, name);
+        onNew={async (slot, name, cwd) => {
+          const made = await api.open(slot, name, cwd);
           await refresh();
           setOpen(made);
         }}

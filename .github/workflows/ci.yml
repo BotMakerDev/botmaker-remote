@@ -64,15 +64,40 @@ jobs:
         with:
           packages: platform-tools
 
+      # Every release is signed by the ONE release key (tools/android-keystore-secret.sh in the umbrella sets
+      # these organization secrets). Until 2026-09-30 this job ran assembleDebug, and a fresh runner makes a
+      # fresh debug key, so no release could update another: Android's "App not installed". A tag without the
+      # key is refused here rather than published unsigned.
+      - name: Decode the release key
+        env:
+          ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_B64" ]; then
+            echo "::error::ANDROID_KEYSTORE_B64 is not set: run tools/android-keystore-secret.sh from the umbrella"
+            exit 1
+          fi
+          echo "$ANDROID_KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+          echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+
+      # APP_VERSION is what the web UI reports and compares against the latest tag; -PappVersion is the
+      # APK's versionName and (derived) versionCode. Both come from the tag, so neither can lag behind it.
       - name: Build web + sync + assemble APK
+        env:
+          APP_VERSION: ${{ github.ref_name }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           npm ci
           npm run build:web
           npx cap sync android
-          cd android && ./gradlew assembleDebug --no-daemon
+          cd android && ./gradlew assembleRelease -PappVersion="$GITHUB_REF_NAME" --no-daemon
 
+      # The .sha256 beside it is what the in-app updater (ApkUpdater) checks the download against.
       - name: Stage the APK under its stable name
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk botmaker-remote.apk
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk botmaker-remote.apk
+          sha256sum botmaker-remote.apk | cut -d' ' -f1 > botmaker-remote.apk.sha256
 
       - name: Resolve the version from the tag
         run: echo "JRELEASER_PROJECT_VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"

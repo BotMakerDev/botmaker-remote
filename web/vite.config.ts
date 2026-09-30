@@ -5,8 +5,11 @@ import react from "@vitejs/plugin-react";
 import { readFileSync } from "node:fs";
 
 // The app's own version, injected as a build-time constant so the auto-updater can compare it against the
-// latest GitHub release tag. Keep web/package.json "version" in step with the APK release tags.
-const appVersion = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf-8")).version;
+// latest GitHub release tag. CI's APK build sets APP_VERSION from the tag, so a released APK always knows
+// what it is; a local build falls back to web/package.json.
+const appVersion =
+  process.env.APP_VERSION?.replace(/^v/, "") ||
+  JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf-8")).version;
 
 // Relative base so the built assets resolve both when served by Studio at "/" and when loaded from
 // file:// inside the Capacitor Android wrapper.

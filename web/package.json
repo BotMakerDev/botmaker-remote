@@ -1,7 +1,7 @@
 {
   "name": "botmaker-remote-web",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "BotMaker Remote web UI — the Claude Code terminals on a dev box, from a phone",
   "scripts": {

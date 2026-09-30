@@ -42,6 +42,8 @@
     <!-- Camera is used by the in-app QR scanner (getUserMedia in the WebView) to scan the pairing QR. -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- The in-app updater (ApkUpdater) hands a downloaded release APK to Android's installer. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- "Claude is waiting" while the app is open (@capacitor/local-notifications; Android 13+). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 </manifest>

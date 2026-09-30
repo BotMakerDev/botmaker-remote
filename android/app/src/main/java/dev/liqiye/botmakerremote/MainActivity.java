@@ -22,6 +22,8 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // A local plugin is registered before the bridge starts, which super.onCreate does.
+        registerPlugin(ApkUpdater.class);
         super.onCreate(savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

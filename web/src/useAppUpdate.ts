@@ -1,13 +1,48 @@
 import { useCallback, useEffect, useState } from "react";
+import { Capacitor, registerPlugin, type PluginListenerHandle } from "@capacitor/core";
 
-/** Build-time app version (from web/package.json), injected by Vite's `define`. */
+/** Build-time app version (the release tag in CI, else web/package.json), injected by Vite's `define`. */
 declare const __APP_VERSION__: string;
 export const APP_VERSION = __APP_VERSION__;
 
-const RELEASES_API = "https://api.github.com/repos/BotMakerDev/botmaker-remote/releases/latest";
+const REPO = "BotMakerDev/botmaker-remote";
+const APK = "botmaker-remote.apk";
+const RELEASES_API = `https://api.github.com/repos/${REPO}/releases/latest`;
 /** Stable permalink to the latest APK. */
-export const LATEST_APK_URL =
-  "https://github.com/BotMakerDev/botmaker-remote/releases/latest/download/botmaker-remote.apk";
+export const LATEST_APK_URL = `https://github.com/${REPO}/releases/latest/download/${APK}`;
+
+/** The native half, `ApkUpdater.java`: download, verify, hand to Android's installer. */
+interface ApkUpdaterPlugin {
+  install(options: { url: string; sha256Url: string }): Promise<void>;
+  addListener(
+    event: "progress",
+    listener: (p: { received: number; total: number }) => void,
+  ): Promise<PluginListenerHandle>;
+}
+
+const ApkUpdater = registerPlugin<ApkUpdaterPlugin>("ApkUpdater");
+
+/** True inside the APK, where an update installs in place; a browser downloads the file instead. */
+export function canInstallInApp(): boolean {
+  return Capacitor.isNativePlatform() && Capacitor.isPluginAvailable("ApkUpdater");
+}
+
+/**
+ * Downloads release `tag`'s APK, checks it against the `.sha256` the release carries, and opens Android's
+ * installer on it. Rejects with the native side's reason (a message a person can act on — "uninstall once",
+ * "allow installs from this app") when the installer would refuse it.
+ */
+export async function installRelease(tag: string, onProgress: (fraction: number | null) => void): Promise<void> {
+  const url = `https://github.com/${REPO}/releases/download/${tag}/${APK}`;
+  const handle = await ApkUpdater.addListener("progress", ({ received, total }) =>
+    onProgress(total > 0 ? received / total : null),
+  );
+  try {
+    await ApkUpdater.install({ url, sha256Url: `${url}.sha256` });
+  } finally {
+    await handle.remove();
+  }
+}
 
 const CHECK_KEY = "botmaker-remote.updateCheckedAt";
 const CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000; // auto-check throttle: at most once every 6h

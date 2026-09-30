@@ -1,5 +1,16 @@
 apply plugin: 'com.android.application'
 
+// The release tag decides the version: CI passes -PappVersion=v1.2.3. versionCode must grow with every
+// release, or Android refuses the update, so it is derived (major·1e6 + minor·1e3 + patch), never written.
+def appVersion = (project.findProperty('appVersion') ?: '0.0.0').toString().replaceFirst(/^v/, '')
+def versionParts = (appVersion.split(/[.\-+]/).toList() + ['0', '0', '0']).take(3)
+        .collect { it.isInteger() ? it.toInteger() : 0 }
+def appVersionCode = Math.max(1, versionParts[0] * 1_000_000 + versionParts[1] * 1_000 + versionParts[2])
+
+// The one release key (tools/android-keystore-secret.sh in the umbrella). Absent locally, where
+// assembleRelease leaves an unsigned APK and assembleDebug signs with this machine's debug key.
+def releaseKeystore = System.getenv('ANDROID_KEYSTORE_FILE')
+
 android {
     namespace "dev.liqiye.botmakerremote"
     compileSdk rootProject.ext.compileSdkVersion
@@ -7,8 +18,8 @@ android {
         applicationId "dev.liqiye.botmakerremote"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode appVersionCode
+        versionName appVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,8 +27,19 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        if (releaseKeystore) {
+            release {
+                storeFile file(releaseKeystore)
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+            }
+        }
+    }
     buildTypes {
         release {
+            if (releaseKeystore) signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

@@ -275,6 +275,21 @@ footer {
   padding: 8px;
   text-decoration: none;
 }
+/* Inside the APK the update is a button (UpdateLink installs in place); it keeps the banner's look. */
+button.update {
+  width: 100%;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+.update-error {
+  display: block;
+  background: var(--accent);
+  color: #fff;
+  text-align: center;
+  padding: 0 8px 8px;
+  font-size: 12px;
+}
 
 /* --- terminal --- */
 .terminal {

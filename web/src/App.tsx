@@ -5,7 +5,8 @@ import { SessionsScreen } from "./SessionsScreen";
 import { TerminalScreen } from "./TerminalScreen";
 import { loadEndpoint, saveEndpoint, type Endpoint } from "./config";
 import { requestNotificationPermission } from "./notify";
-import { LATEST_APK_URL, useAppUpdate } from "./useAppUpdate";
+import { useAppUpdate } from "./useAppUpdate";
+import { UpdateLink } from "./UpdateLink";
 import { useSessions } from "./useSessions";
 
 /** Three screens: pair, pick a window, be in it. The endpoint is the only thing remembered. */
@@ -52,9 +53,9 @@ export function App() {
   return (
     <>
       {update.available && (
-        <a className="update" href={LATEST_APK_URL}>
-          Update available: {update.latest} — tap to download
-        </a>
+        <UpdateLink tag={update.latest} className="update">
+          Update available: {update.latest} — tap to install
+        </UpdateLink>
       )}
       <SessionsScreen
         api={api}

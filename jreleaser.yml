@@ -30,9 +30,10 @@ release:
     overwrite: false
     update:
       enabled: false
+    # The workflow writes release-notes.md with tools/changelog-section.sh, the same script the umbrella's
+    # release gate reads.
     changelog:
-      formatted: ALWAYS
-      preset: conventional-commits
+      external: release-notes.md
 
 files:
   artifacts:

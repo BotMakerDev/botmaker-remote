@@ -6,7 +6,7 @@ notes (`tools/changelog-section.sh`), and the release refuses a version with no 
 Sections are `## [x.y.z] — YYYY-MM-DD`, newest first. Releases up to 0.5.0 have their notes on their GitHub
 Release only.
 
-## [Unreleased]
+## [0.6.0] — 2026-11-10
 
 ### Changed
 

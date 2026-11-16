@@ -6,6 +6,13 @@ notes (`tools/changelog-section.sh`), and the release refuses a version with no 
 Sections are `## [x.y.z] — YYYY-MM-DD`, newest first. Releases up to 0.5.0 have their notes on their GitHub
 Release only.
 
+## [Unreleased]
+
+### Fixed
+
+- The release carries its APK again. v0.6.0 published none: the tag's job found the release page sluice had
+  written and refused to add to it. It now attaches the APK and leaves the notes.
+
 ## [0.6.0] — 2026-11-10
 
 ### Changed

@@ -28,8 +28,12 @@ release:
     releaseName: 'v{{projectVersion}}'
     skipTag: true
     overwrite: false
+    # sluice writes the release page as it tags, so it exists when this job runs: it is updated with the
+    # assets only, its notes left as sluice wrote them. Refusing to update cost v0.6.0 its APK (2026-11-16).
     update:
-      enabled: false
+      enabled: true
+      sections:
+        - ASSETS
     # The workflow writes release-notes.md with tools/changelog-section.sh, the same script the umbrella's
     # release gate reads.
     changelog:
